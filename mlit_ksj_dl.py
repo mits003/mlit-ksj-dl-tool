@@ -1,6 +1,7 @@
 import glob
 import os
 import pathlib
+import pprint
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.select import Select
@@ -18,7 +19,7 @@ DRIVER_PATH = '../mlit-ksj-dl-tool/WebDriver/chromedriver'
 URL = 'https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-C23.html' # 海岸線
 URL = 'https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A44.html' # 歴史的風致維持向上計画の重点地区
 
-EXTENT = "*.shp"
+EXTENT = "shp"
 ENCODING = "Shift_JIS"
 
 def file_dl(driver_path, url):
@@ -58,10 +59,10 @@ def file_dl(driver_path, url):
     return dl_dir
 
 def extraction(dl_dir):
-    extdir_name = 'shp'  # 保存先フォルダ名
+    extdir_name = 'shp'  # save folder
     extdir_path = pathlib.Path(os.getcwd(), extdir_name)
-    extdir_path.mkdir(exist_ok=True)  # 存在していてもOKとする（エラーで止めない）
-    ext_dir = str(extdir_path.resolve())  # 絶対パス
+    extdir_path.mkdir(exist_ok=True)
+    ext_dir = str(extdir_path.resolve())
     print(ext_dir)
     zip_files = glob.glob(dl_dir + "/*.zip")
     print(zip_files)
@@ -69,18 +70,20 @@ def extraction(dl_dir):
         with zipfile.ZipFile(z) as existing_zip:
             existing_zip.extractall(ext_dir)
 
-def create_cpg(extent, encoding):
-    files = list(pathlib.Path(os.getcwd()).glob(EXTENT))
+    return ext_dir
+
+def create_cpg(extent, encoding, ext_dir):
+    files = glob.glob(ext_dir + "/*." + EXTENT)
     pprint.pprint(files)
 
     for i, f in enumerate(files):
-        basename = f.stem
-        path = os.path.join(DIRECTORY, basename + ".cpg")
+        basename = os.path.splitext(os.path.basename(f))[0]
+        path = os.path.join(ext_dir, basename + ".cpg")
         cpg = open(path, 'w')
         cpg.write(ENCODING)
         cpg.close()
 
 if __name__ == "__main__":
     dl_dir = file_dl(DRIVER_PATH, URL)
-    extraction(dl_dir)
-    # create_cpg(EXTENT, ENCODING)
+    ext_dir  = extraction(dl_dir)
+    create_cpg(EXTENT, ENCODING, ext_dir)
