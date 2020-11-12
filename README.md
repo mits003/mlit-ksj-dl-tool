@@ -13,5 +13,5 @@ OSに合わせて、[ここ](https://sites.google.com/a/chromium.org/chromedrive
 以下のコマンドを実行する
 
 ```
-$ python3 mlit_ksj_dl.py URL
+$ python3 mlit_ksj_dl.py ダウンロードしたいページのURL
 ```
