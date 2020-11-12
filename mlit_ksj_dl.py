@@ -11,18 +11,15 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+import sys
 import time
 import zipfile
 
 DRIVER_PATH = '../mlit-ksj-dl-tool/WebDriver/chromedriver'
-# URL = 'https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-v2_4.html' # 行政区域
-URL = 'https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-C23.html' # 海岸線
-URL = 'https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A44.html' # 歴史的風致維持向上計画の重点地区
-
 EXTENT = "shp"
 ENCODING = "Shift_JIS"
 
-def file_dl(driver_path, url):
+def file_dl(driver_path):
     dldir_name = 'download'  # 保存先フォルダ名
     dldir_path = pathlib.Path(os.getcwd(), dldir_name)
     dldir_path.mkdir(exist_ok=True)  # 存在していてもOKとする（エラーで止めない）
@@ -42,6 +39,7 @@ def file_dl(driver_path, url):
     driver = webdriver.Chrome(executable_path=DRIVER_PATH, chrome_options=options)
 
     # 国土数値情報のダウンロードページにアクセスする
+    url = sys.argv[1]
     driver.get(url)
 
     # 要素を指定する
@@ -84,6 +82,6 @@ def create_cpg(extent, encoding, ext_dir):
         cpg.close()
 
 if __name__ == "__main__":
-    dl_dir = file_dl(DRIVER_PATH, URL)
+    dl_dir = file_dl(DRIVER_PATH)
     ext_dir  = extraction(dl_dir)
     create_cpg(EXTENT, ENCODING, ext_dir)
