@@ -15,8 +15,10 @@ OSに合わせて、[ここ](https://sites.google.com/a/chromium.org/chromedrive
 
 [国土数値情報ダウンロードサービス](https://nlftp.mlit.go.jp/ksj/)からダウンロードしたいページのURLを取得する。
 
-以下のコマンドを実行する
+以下のコマンドを実行する。
 
 ```
 $ python3 mlit_ksj_dl.py ダウンロードしたいページのURL
 ```
+
+__mlit-ksj-dl-tool/download__ にダウンロードしたzipファイルが、__mlit-ksj-dl-tool/shp__ に展開したshpファイル群が保存されます。
