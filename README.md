@@ -1,2 +1,17 @@
 # mlit-ksj-dl-tool
-File download tool of 国土数値情報
+国土数値情報のダウンロードツール
+
+# 使い方
+mlit-ksj-tool をDLし、任意のフォルダに配置する。
+
+OSに合わせて、[ここ](https://sites.google.com/a/chromium.org/chromedriver/home)からChromeDriverをダウンロードする。
+
+ダウンロードしたWebDriverを __mlit-ksj-dl-tool/WebDriver__ に保存する。
+
+[国土数値情報ダウンロードサービス](https://nlftp.mlit.go.jp/ksj/)からダウンロードしたいページのURLを取得する。
+
+以下のコマンドを実行する
+
+```
+$ python3 mlit_ksj_dl.py URL
+```
