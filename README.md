@@ -4,6 +4,11 @@
 # 使い方
 mlit-ksj-tool をDLし、任意のフォルダに配置する。
 
+必要なライブラリをインストールする
+```
+pip install selenium
+```
+
 OSに合わせて、[ここ](https://sites.google.com/a/chromium.org/chromedriver/home)からChromeDriverをダウンロードする。
 
 ダウンロードしたWebDriverを __mlit-ksj-dl-tool/WebDriver__ に保存する。
