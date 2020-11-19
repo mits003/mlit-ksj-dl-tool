@@ -19,13 +19,24 @@ DRIVER_PATH = '../mlit-ksj-dl-tool/WebDriver/chromedriver'
 EXTENT = "shp"
 ENCODING = "Shift_JIS"
 
-def file_dl(driver_path):
-    dldir_name = 'download'  # 保存先フォルダ名
-    dldir_path = pathlib.Path(os.getcwd(), dldir_name)
-    dldir_path.mkdir(exist_ok=True)  # 存在していてもOKとする（エラーで止めない）
-    dl_dir = str(dldir_path.resolve())  # 絶対パス
+def file_dl(driver_path:str) -> str:
+    """download files from mlit ksj, 国土数値情報 by browser automation
+    Parameters
+    -----
+    driver_path: str
+        path to WebDriver
 
-    # Seleniumをあらゆる環境で起動させるChromeオプション
+    Returns
+    -----
+    dl_dir: str
+        directory path to the files downloaded
+    """
+    dldir_name = 'download'
+    dldir_path = pathlib.Path(os.getcwd(), dldir_name)
+    dldir_path.mkdir(exist_ok=True)
+    dl_dir = str(dldir_path.resolve())
+
+    # Chrome option to boot Selenium in any environment
     options = Options()
     options.add_argument('--disable-gpu')
     options.add_argument('--disable-extensions')
@@ -35,18 +46,16 @@ def file_dl(driver_path):
     options.add_experimental_option("prefs", {
         "download.default_directory": dl_dir})
     # options.add_argument('--headless'); # ※ヘッドレスモードを使用する場合、コメントアウトを外す
-    # ブラウザの起動
+    # Opne browser
     driver = webdriver.Chrome(executable_path=DRIVER_PATH, chrome_options=options)
 
-    # 国土数値情報のダウンロードページにアクセスする
+    # Open DL page of mlit ksj 国土数値情報
     url = sys.argv[1]
     driver.get(url)
 
-    # 要素を指定する
     selector = '#menu-button'
     elements = driver.find_elements_by_css_selector(selector)
     print(str(len(elements)) + " zip file is going to be DL")
-
     for i, e in enumerate(elements):
         print(i)
         e.click()
@@ -56,7 +65,18 @@ def file_dl(driver_path):
 
     return dl_dir
 
-def extraction(dl_dir):
+def extraction(dl_dir: str) -> str:
+    """extract zipfiles and accumulate the shpfile in a directory
+    Parameters
+    -----
+    dl_dir: str
+        absolute path the zipfiles are
+
+    Returns
+    -----
+    ext_dir: str
+        absolute path the shapefiles are
+    """
     extdir_name = 'shp'  # save folder
     extdir_path = pathlib.Path(os.getcwd(), extdir_name)
     extdir_path.mkdir(exist_ok=True)
@@ -70,7 +90,17 @@ def extraction(dl_dir):
 
     return ext_dir
 
-def create_cpg(extent, encoding, ext_dir):
+def create_cpg(extent:str, encoding:str, ext_dir:str):
+    """create the cpg files for each shp
+    Parameters
+    -----
+    extent: str
+        extention of shp
+    encoding: str
+        encoding of the shpfiles
+    ext_dir: str
+        absolute path the shpfiles are
+    """
     files = glob.glob(ext_dir + "/*." + EXTENT)
     pprint.pprint(files)
 
