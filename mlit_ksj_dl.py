@@ -74,7 +74,7 @@ def create_cpg(extent, encoding, ext_dir):
     files = glob.glob(ext_dir + "/*." + EXTENT)
     pprint.pprint(files)
 
-    for i, f in enumerate(files):
+    for f in files:
         basename = os.path.splitext(os.path.basename(f))[0]
         path = os.path.join(ext_dir, basename + ".cpg")
         cpg = open(path, 'w')
